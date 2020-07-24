@@ -1,0 +1,2 @@
+D:\dojo\SadCatsonLand\Debug\SadCatsonLand.exe
+D:\dojo\SadCatsonLand\Debug\SadCatsonLand.pdb
