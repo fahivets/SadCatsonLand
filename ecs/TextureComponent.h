@@ -5,9 +5,11 @@
 
 struct TextureComponent : public Component
 {
+	// Constructor/Destructor
 	TextureComponent(SDL_Renderer& rRenderer, const char* textureName);
 	~TextureComponent() = default;
 
+	// Functions
 	void init() override;
 	void render(SDL_Renderer& rRender) override;
 	void update(const float& deltaTime) override;
@@ -17,7 +19,6 @@ struct TextureComponent : public Component
 
 	std::string	m_textureName;
 	SDL_Texture* m_texture{ nullptr };
-	//SDL_Rect	m_srcRect;
 	SDL_FRect	m_dstFRect;
 };
 

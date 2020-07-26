@@ -36,7 +36,8 @@ private:
 	// Entity factory
 	Entity& createBackground(const Vector2f& rPosition, const Vector2f& rSize);
 	Entity& createPlayer(const Vector2f& rPosition, const Vector2f& rSize);
-
+	std::shared_ptr<Animation> createAnimations(const FrameData& animationFrameData, const std::string& spriteTextureName);
+//	Entity& createEnemy(const Vector2f& rPosition, const Vector2f& rSize);
 		/*
 	void createBall();
 	void createPaddle();

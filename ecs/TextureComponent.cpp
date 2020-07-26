@@ -12,13 +12,7 @@ TextureComponent::TextureComponent(SDL_Renderer& rRenderer, const char* textureN
 void TextureComponent::init()
 {
 	m_pBoxComp = &m_entity->getComponent<BoxComponent>();
-
-	m_dstFRect = {
-		m_pBoxComp->x(),
-		m_pBoxComp->y(),
-		m_pBoxComp->w(),
-		m_pBoxComp->h(),
-	};
+	m_dstFRect = m_pBoxComp->m_fRect;
 }
 
 void TextureComponent::render(SDL_Renderer& rRender)
@@ -28,10 +22,5 @@ void TextureComponent::render(SDL_Renderer& rRender)
 
 void TextureComponent::update(const float& deltaTime)
 {
-	m_dstFRect = {
-		m_pBoxComp->x(),
-		m_pBoxComp->y(),
-		m_pBoxComp->w(),
-		m_pBoxComp->h(),
-	};
+	m_dstFRect = m_pBoxComp->m_fRect;
 }

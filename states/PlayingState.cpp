@@ -73,6 +73,8 @@ void PlayingState::initStateResources()
 	// Load textures
 	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "background_test.png");
 	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player_test.png");
+	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player_walk.png");
+	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player_run.png");
 
 	// Load audio
 	ResourceHolder::get().audio.setMusic("lvl_1_theme.mp3");
@@ -88,7 +90,7 @@ void PlayingState::createStateEntitys()
 		m_pGame->getWinSize());
 	
 	createPlayer({ m_pGame->getWinSize().x / 2.0f, m_pGame->getWinSize().y / 2.0f },
-		ResourceHolder::get().textures.getTextureSize("player_test.png"));
+		Vector2f{35,57});
 }
 
 void PlayingState::playMusic()
@@ -115,12 +117,54 @@ Entity& PlayingState::createPlayer(const Vector2f& rPosition, const Vector2f& rS
 	
 	entity.addComponent<PositionComponent>(rPosition);
 	entity.addComponent<BoxComponent>(rSize);
-	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "player_test.png");
+	
+	std::string spriteTextureName = { "player_walk.png" };
+	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), spriteTextureName);
+
+
+	entity.addComponent<AnimationComponent>();
+	auto& animation(entity.getComponent<AnimationComponent>());
+	// Create Walking Animations
+	FrameData walkingAnimationData;
+	walkingAnimationData.id = 6;
+	walkingAnimationData.displayTimeSeconds = 60.0f;
+	walkingAnimationData.rect = {0, 0, 0, 0};
+	animation.addAnimation(AnimationState::Walk, createAnimations(walkingAnimationData, spriteTextureName));
+	/*
+	// Create Run Animations
+	FrameData runAnimationData;
+	runAnimationData.id = 6;
+	runAnimationData.displayTimeSeconds = 60.0f;
+	runAnimationData.rect = { 0, 0, 0, 0 };
+	animation.addAnimation(AnimationState::Run, createAnimations(runAnimationData, "player_run.png"));
+	*/
+
+	entity.addComponent<TransformComponent>();
+	entity.addComponent<KeyboardMovementComponent>(Vector2f{0.2f, 0.2f}, 1.5f);
 
 	entity.addGroup(PlayingStateGroup::GPlayer);
-
 	return (entity);
 }
+
+std::shared_ptr<Animation> PlayingState::createAnimations(const FrameData& animationFrameData, const std::string& spriteTextureName)
+{
+	FrameData data = animationFrameData;
+	
+	Vector2f spriteTextureSize = ResourceHolder::get().textures.getTextureSize(spriteTextureName);
+	Vector2f frameTextureSize{ spriteTextureSize.x / data.id, spriteTextureSize.y };
+	data.rect.w = static_cast<int>(frameTextureSize.x);
+	data.rect.h = static_cast<int>(frameTextureSize.y);
+
+	std::shared_ptr<Animation> newAnimation = std::make_shared<Animation>();
+	for (int frameID = 0; frameID < data.id; ++frameID)
+	{
+		data.rect.x = data.rect.w * frameID;
+		newAnimation->addFrame(frameID, data.rect, data.displayTimeSeconds);
+	}
+
+	return (newAnimation);
+}
+
 
 /*
 // Entity factory

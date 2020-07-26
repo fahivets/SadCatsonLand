@@ -7,12 +7,9 @@
 #include "TextureComponent.h"
 #include "LableComponent.h"
 #include "UIButtonComponent.h"
-/*old component
-#include "PhysicsComponent.h"
-#include "RectangleComponent.h"
-#include "PaddleControlComponent.h"
-#include "RectangleComponent.h"
+#include "TransformComponent.h"
+#include "KeyboardMovementComponent.h"
+#include "AnimationComponent.h"
+#include "SpriteComponent.h"
 
-
-*/
 #endif	/*	end COMPONENTINCLUDEHELPER_H_INCLUDE	*/
