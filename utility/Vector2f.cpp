@@ -83,7 +83,6 @@ std::ostream& operator<<(std::ostream& out, const Vector2f& vec)
     return (out);
 }
 
-//////TESTTTTT
 Vector2f& Vector2f::operator+=(const float& rVal)
 {
     x += rVal;
@@ -114,24 +113,24 @@ Vector2f& Vector2f::operator/=(const float& rVal)
 
 Vector2f operator+(Vector2f& rVec1, const float& rVal)
 {
-    rVec1 += rVal;
-    return (rVec1);
+    Vector2f result{ rVec1.x + rVal, rVec1.y + rVal };
+    return (result);
 }
 
 Vector2f operator-(Vector2f& rVec1, const float& rVal)
 {
-    rVec1 -= rVal;
-    return (rVec1);
+    Vector2f result{ rVec1.x - rVal, rVec1.y - rVal };
+    return (result);
 }
 
 Vector2f operator*(Vector2f& rVec1, const float& rVal)
 {
-    rVec1 *= rVal;
-    return (rVec1);
+    Vector2f result{ rVec1.x * rVal, rVec1.y * rVal };
+    return (result);
 }
 
 Vector2f operator/(Vector2f& rVec1, const float& rVal)
 {
-    rVec1 /= rVal;
-    return (rVec1);
+    Vector2f result{ rVec1.x / rVal, rVec1.y / rVal };
+    return (result);
 }

@@ -22,10 +22,17 @@ void AnimationComponent::update(const float& deltaTime)
 
 void AnimationComponent::handleInput(const InputManager& input)
 {
-	Vector2f mousePos = input.mousePos();
+	//Vector2f mousePos = input.mousePos();
+	m_mousePos = input.mousePos();
 	Vector2f currPos = m_pSpriteComp->m_pBoxComp->m_pPosComp->m_position;
-	
-	m_pSpriteComp->m_angle = toDegrees(atan2(mousePos.y - currPos.y, mousePos.x - currPos.x));
+	m_currPos = currPos;
+	m_pSpriteComp->m_angle = toDegrees(atan2(m_mousePos.y - m_currPos.y, m_mousePos.x - m_currPos.x));
+//	m_pSpriteComp->m_angle = toDegrees(atan2(m_mousePos.y - currPos.y, m_mousePos.x - currPos.x));
+}
+
+void AnimationComponent::render(SDL_Renderer& rRender)
+{
+	SDL_RenderDrawLineF(&rRender, m_mousePos.x, m_mousePos.y, m_currPos.x, m_currPos.y);
 }
 
 void AnimationComponent::addAnimation(AnimationState state, std::shared_ptr<Animation> animation)

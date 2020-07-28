@@ -19,6 +19,8 @@ struct SpriteComponent : public Component
 	// Members
 	BoxComponent* m_pBoxComp{ nullptr };
 	SDL_Texture* m_spriteTexture{ nullptr };
+
+	std::unordered_map<unsigned int, SDL_Texture*> m_spriteMap;
 	SDL_Rect	m_srcRect{ 0 };
 	SDL_FRect	m_dstFRect{ 0 };
 	float m_angle{ 0.0f };

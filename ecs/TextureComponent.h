@@ -19,7 +19,8 @@ struct TextureComponent : public Component
 
 	std::string	m_textureName;
 	SDL_Texture* m_texture{ nullptr };
-	SDL_FRect	m_dstFRect;
+	SDL_Rect m_srcRect{ 0 };
+	SDL_FRect	m_dstFRect{ 0 };
 };
 
 #endif	/*	end TEXTURECOMPONENT_H_INCLUDE	*/

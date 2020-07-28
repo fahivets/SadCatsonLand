@@ -20,6 +20,7 @@ void DisplayManager::initDisplayManager(const int& width, const int& heigth)
 	m_winSize = { static_cast<float>(width), static_cast<float>(heigth) };
 	if (initSDL() && initWindow(width, heigth) && initRenderer())
 	{
+		//SDL_ShowCursor(0);
 		m_status = true;
 	}
 	else

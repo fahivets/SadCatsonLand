@@ -6,12 +6,29 @@ SpriteComponent::SpriteComponent(SDL_Renderer& rRenderer, const char* spriteName
 {
 	ResourceHolder::get().textures.set(rRenderer, spriteName);
 	m_spriteTexture = ResourceHolder::get().textures.get(spriteName);
+	
+	Vector2f textureSize = ResourceHolder::get().textures.queryTexture(m_spriteTexture);
+	m_srcRect = {
+		0,
+		0,
+		static_cast<int>(textureSize.x),
+		static_cast<int>(textureSize.y)
+	};
 }
 
 SpriteComponent::SpriteComponent(SDL_Renderer& rRenderer, const std::string& spriteName)
 {
 	ResourceHolder::get().textures.set(rRenderer, spriteName);
 	m_spriteTexture = ResourceHolder::get().textures.get(spriteName.c_str());
+	
+	Vector2f textureSize = ResourceHolder::get().textures.queryTexture(m_spriteTexture);
+
+	m_srcRect = {
+		0,
+		0,
+		static_cast<int>(textureSize.x),
+		static_cast<int>(textureSize.y)
+	};
 }
 
 void SpriteComponent::init()

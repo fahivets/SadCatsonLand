@@ -8,7 +8,7 @@ StartState::StartState(MainGame& game) : State(game)
 	std::cout << "Start State Constructor" << "\n";
 	initStateResources();
 	createStateEntitys();
-	playMusic();
+//	playMusic();
 
 }
 
@@ -97,9 +97,9 @@ void StartState::createAllButtons()
 
 	// Options Button
 	ButtonTextureArray optionsButtonTextures{
-		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Options", "basic.ttf", 42, {200, 200, 200}),
-		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Options", "basic.ttf", 41, {200, 100, 0}),
-		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Options", "basic.ttf", 43, {200, 0, 0})
+		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Settings", "basic.ttf", 42, {200, 200, 200}),
+		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Settings", "basic.ttf", 41, {200, 100, 0}),
+		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Settings", "basic.ttf", 43, {200, 0, 0})
 	};
 	Vector2f optionsButtonPos = { m_pGame->getWinSize().x / 2, m_pGame->getWinSize().y * 0.8f };
 	Vector2f optionsButtonSize = ResourceHolder::get().textures.queryTexture(optionsButtonTextures[0]);
@@ -146,8 +146,7 @@ Entity& StartState::createBackground(const Vector2f& rPosition, const Vector2f& 
 
 	entity.addComponent<PositionComponent>(rPosition);
 	entity.addComponent<BoxComponent>(Vector2f{ rSize.x, rSize.y });
-	entity.addComponent<TextureComponent>(m_pGame->getRenderer(), "sad_cat.png");
-
+	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), "sad_cat.png");
 	entity.addGroup(StartStateGroup::GBackground);
 
 	return (entity);

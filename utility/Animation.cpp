@@ -7,7 +7,7 @@ void Animation::addFrame(const int& textureID, const SDL_Rect& rect, const float
 
 	data.id = textureID;
 	data.rect = rect;
-	data.displayTimeSeconds = frameTime;
+	data.displayTimeMSeconds = frameTime;
 	m_frames.emplace_back(std::move(data));
 }
 
@@ -21,7 +21,7 @@ bool Animation::updateFrame(const float& deltaTime)
 	if (m_frames.size() > 0)
 	{
 		m_currentFrameTime += deltaTime;
-		if (m_currentFrameTime >= m_frames[m_currentFrameIndex].displayTimeSeconds)
+		if (m_currentFrameTime >= m_frames[m_currentFrameIndex].displayTimeMSeconds)
 		{
 			m_currentFrameTime = 0.0f;
 			incrementFrame();

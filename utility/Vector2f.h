@@ -4,7 +4,7 @@
 /*
     TODO check and change methods: 
     - multiply
-    - divide
+    - divide Vec1/Vec2 -> bag: divide lhv vectors
 */
 
 struct Vector2f

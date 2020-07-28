@@ -22,6 +22,13 @@ void BoxComponent::update(const float& deltaTime)
 	m_fRect.x = m_pPosComp->x() - m_fRect.w / 2;
 	m_fRect.y = m_pPosComp->y() - m_fRect.h / 2;
 }
+//DEBAG
+void BoxComponent::render(SDL_Renderer& rRender)
+{
+	SDL_SetRenderDrawColor(&rRender, 255, 0, 0, 255);
+	SDL_RenderDrawRectF(&rRender, &m_fRect);
+	SDL_SetRenderDrawColor(&rRender, 0, 0, 0, 255);
+}
 
 float BoxComponent::x() const noexcept
 {
@@ -55,20 +62,20 @@ float BoxComponent::yCenter() const noexcept
 
 float BoxComponent::left() const noexcept
 {
-	return (xCenter() - (w() / 2));
+	return (xCenter() - (w() / 2.0f));
 }
 
 float BoxComponent::right() const noexcept
 {
-	return (xCenter() + (w() / 2));
+	return (xCenter() + (w() / 2.0f));
 }
 
 float BoxComponent::top() const noexcept
 {
-	return (yCenter() - (h() / 2));
+	return (yCenter() - (h() / 2.0f));
 }
 
 float BoxComponent::bottom() const noexcept
 {
-	return (yCenter() + (h() / 2));
+	return (yCenter() + (h() / 2.0f));
 }

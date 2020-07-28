@@ -12,4 +12,6 @@
 #include "AnimationComponent.h"
 #include "SpriteComponent.h"
 
+#include "CameraComponent.h" // test
+
 #endif	/*	end COMPONENTINCLUDEHELPER_H_INCLUDE	*/

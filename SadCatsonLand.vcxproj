@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="ecs\AnimationComponent.cpp" />
     <ClCompile Include="ecs\BoxComponent.cpp" />
+    <ClCompile Include="ecs\CameraComponent.cpp" />
     <ClCompile Include="ecs\Entity.cpp" />
     <ClCompile Include="ecs\EntityManager.cpp" />
     <ClCompile Include="ecs\KeyboardMovementComponent.cpp" />
@@ -195,6 +196,7 @@
   <ItemGroup>
     <ClInclude Include="ecs\AnimationComponent.h" />
     <ClInclude Include="ecs\BoxComponent.h" />
+    <ClInclude Include="ecs\CameraComponent.h" />
     <ClInclude Include="ecs\Component.h" />
     <ClInclude Include="ecs\ComponentIncludeHelper.h" />
     <ClInclude Include="ecs\ECSHelper.h" />

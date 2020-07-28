@@ -12,6 +12,7 @@ public:
 	// Use enum for groups to keep track of our entities
 	enum PlayingStateGroup : std::size_t
 	{
+		GCamera,
 		GBackground,
 		GPlayer,
 		GEnemy
@@ -36,8 +37,8 @@ private:
 	// Entity factory
 	Entity& createBackground(const Vector2f& rPosition, const Vector2f& rSize);
 	Entity& createPlayer(const Vector2f& rPosition, const Vector2f& rSize);
-	std::shared_ptr<Animation> createAnimations(const FrameData& animationFrameData, const std::string& spriteTextureName);
-//	Entity& createEnemy(const Vector2f& rPosition, const Vector2f& rSize);
+	std::shared_ptr<Animation> createAnimations(const FrameData& animationFrameData, const std::string& spriteTextureName, int rows = 1);
+	Entity& createEnemy(const Vector2f& rPosition, const Vector2f& rSize);
 		/*
 	void createBall();
 	void createPaddle();
@@ -54,7 +55,9 @@ private:
 private:
 	// Members
 	EntityManager m_entityManager;
-
+	Entity* m_world{ nullptr };
+	Entity* m_bob{ nullptr };
+	Entity* m_player{ nullptr };
 };
 
 // Template functions

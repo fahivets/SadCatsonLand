@@ -1,4 +1,4 @@
-﻿  AnimationComponent.cpp
-  State.cpp
+﻿  CameraComponent.cpp
+  PlayingState.cpp
   Generating Code...
   SadCatsonLand.vcxproj -> D:\dojo\SadCatsonLand\Debug\SadCatsonLand.exe

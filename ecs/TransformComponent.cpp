@@ -41,5 +41,5 @@ void TransformComponent::setY(const float& y)
 
 Vector2f TransformComponent::getPosition() const
 {
-	return Vector2f();
+	return (m_pPosComp->m_position);
 }

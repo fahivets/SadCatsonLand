@@ -79,6 +79,9 @@ void MainGame::run()
 		{
 			// Update
 			update(constFTimeStep);
+		
+			// Update prev input
+			m_input.updatePrevInput();
 
 			lag -= constFTimeSlice;
 		}
@@ -90,7 +93,7 @@ void MainGame::run()
 		updateState();
 
 		// Update prev input
-		m_input.updatePrevInput();
+	//	m_input.updatePrevInput();
 
 		// Update delta time every frame
 		deltaTime = m_timer.getDelta();

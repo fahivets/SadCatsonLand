@@ -5,7 +5,7 @@ struct FrameData
 {
 	int id;
 	SDL_Rect rect;
-	float displayTimeSeconds;
+	float displayTimeMSeconds;
 };
 
 class Animation

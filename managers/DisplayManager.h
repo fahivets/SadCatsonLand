@@ -21,18 +21,20 @@ public:
 	const Vector2f& getWinSize() const;
 
 private:
-	SDL_Window* m_window;
-	SDL_Renderer* m_renderer;
-	bool m_status;
-	Vector2f m_winSize;
-	int m_winWidth;
-	int m_winHeigth;
 	// Init Private Functions
 	void initVariables();
 	bool initSDL();
 	bool initWindow(const int& width, const int& heigth);
 	bool initRenderer();
 	void quit();
+
+private:
+	SDL_Window* m_window;
+	SDL_Renderer* m_renderer;
+	bool m_status;
+	Vector2f m_winSize;
+	int m_winWidth;
+	int m_winHeigth;
 };
 
 #endif	/*	end DISPLAYMANAGER_H_INCLUDE	*/

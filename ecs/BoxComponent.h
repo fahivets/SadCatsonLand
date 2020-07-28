@@ -13,6 +13,8 @@ struct BoxComponent : public Component
 	void init() override;
 	void update(const float& deltaTime) override;
 
+	void render(SDL_Renderer& rRender) override; //debag
+
 	float x() const noexcept;
 	float y() const noexcept;
 	float w() const noexcept;
