@@ -24,9 +24,8 @@ struct PhysicsComponent : public Component
 	PositionComponent* m_pPosComp{ nullptr };
 	BoxComponent* m_pBoxComp{ nullptr };
 	SpriteComponent* m_pSpriteComp{ nullptr };
-	Vector2f m_dir{ 0.0f, 0.0f };
 	Vector2f m_startPos{0.0f, 0.0f};
-
+	Vector2f m_worldSize{0.0f, 0.0f};
 	Vector2f m_velocity{ 0.0f, 0.0f }; 
 
 };

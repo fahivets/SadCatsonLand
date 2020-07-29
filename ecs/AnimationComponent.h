@@ -24,8 +24,6 @@ struct AnimationComponent : public Component
 	void update(const float& deltaTime) override;
 	void handleInput(const InputManager& input) override;
 
-	void render(SDL_Renderer& rRender) override; //debag
-
 	void addAnimation(AnimationState state, std::shared_ptr<Animation> animation);
 	void setAnimationState(AnimationState state);
 	const AnimationState& getAnimationState() const;

@@ -39,7 +39,7 @@ private:
 
 private:
 	EntityManager m_entityManager;
-//	Entity* m_background { nullptr };
+
 };
 
 #endif	/*	end STARTSTATE_H_INCLUDE	*/

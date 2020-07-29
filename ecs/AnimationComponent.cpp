@@ -34,11 +34,6 @@ void AnimationComponent::handleInput(const InputManager& input)
 	m_pSpriteComp->m_angle = toDegrees(atan2(m_mousePos.y - m_currPos.y, m_mousePos.x - m_currPos.x));
 }
 
-void AnimationComponent::render(SDL_Renderer& rRender)
-{
-	SDL_RenderDrawLineF(&rRender, m_mousePos.x, m_mousePos.y, m_currPos.x, m_currPos.y);
-}
-
 void AnimationComponent::addAnimation(AnimationState state, std::shared_ptr<Animation> animation)
 {
 	m_animationsMap.insert(std::make_pair(state, animation));

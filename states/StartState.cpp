@@ -5,23 +5,18 @@
 
 StartState::StartState(MainGame& game) : State(game)
 {
-	std::cout << "Start State Constructor" << "\n";
 	initStateResources();
 	createStateEntitys();
-//	playMusic();
-
+	playMusic();
 }
 
 StartState::~StartState()
 {
-	std::cout << "Start State Destructor" << "\n";
-
 }
 
 void StartState::endState()
 {
 	ResourceHolder::get().audio.stopMusic();
-	std::cout << "Ending Start State" << "\n";
 }
 
 void StartState::handleInput(const InputManager& input)
@@ -29,13 +24,10 @@ void StartState::handleInput(const InputManager& input)
 	if (input.keyDown(SDL_SCANCODE_Q))
 	{
 		needPop(true);
-
-		std::cout << "Q = Quit" << " Pop status: " << checkForQuit() << "\n";
 	}
 	if (input.keyDown(SDL_SCANCODE_RETURN))
 	{
 		m_pGame->pushState<PlayingState>(*m_pGame);
-		std::cout << "ENTER" << "\n";
 	}
 	m_entityManager.handleInput(input);
 }
@@ -66,10 +58,8 @@ void StartState::createStateEntitys()
 {
 	createAllButtons();
 
-	createBackground(
-		{ m_pGame->getWinSize().x / 2.0f, m_pGame->getWinSize().y * 0.3f },
-		ResourceHolder::get().textures.getTextureSize("sad_cat.png")
-	);
+	createBackground({ m_pGame->getWinSize().x / 2.0f, m_pGame->getWinSize().y * 0.3f },
+		ResourceHolder::get().textures.getTextureSize("sad_cat.png"));
 
 }
 
@@ -80,7 +70,7 @@ void StartState::playMusic()
 
 void StartState::createAllButtons()
 {
-	// Start Button
+	// Start Button Param
 	ButtonTextureArray startButtonTextures{
 		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Start Game", "basic.ttf", 42, {200, 200, 200}),
 		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Start Game", "basic.ttf", 41, {200, 100, 0}),
@@ -95,7 +85,7 @@ void StartState::createAllButtons()
 		m_pGame->pushState<PlayingState>(*m_pGame);
 	};
 
-	// Options Button
+	// Options Button Param
 	ButtonTextureArray optionsButtonTextures{
 		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Settings", "basic.ttf", 42, {200, 200, 200}),
 		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Settings", "basic.ttf", 41, {200, 100, 0}),
@@ -106,10 +96,10 @@ void StartState::createAllButtons()
 	std::function<void(void)> optionsButtonFunc = [&]() -> void
 	{
 		ResourceHolder::get().audio.playSound("meow.ogg", 0, 0, 42);
-		std::cout << "[CALL_BACK] Options button pressed" << "\n";
+		std::cout << "Settings in progress ^_^" << "\n";
 	};
 
-	// Exit Button
+	// Exit Button Param
 	ButtonTextureArray exitButtonTextures{
 		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Exit", "basic.ttf", 42, {200, 200, 200}),
 		ResourceHolder::get().fonts.getText(m_pGame->getRenderer(), "Exit", "basic.ttf", 41, {200, 100, 0}),

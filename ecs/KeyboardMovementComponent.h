@@ -23,10 +23,10 @@ struct KeyboardMovementComponent : public Component
 	TransformComponent* m_pTransformComp{ nullptr };
 	BoxComponent* m_pBoxComp{ nullptr };
 
-	//CameraComponent* m_pCameraComp{ nullptr };
 	Vector2f m_velocity{ 0.0f,0.0f };
 	Vector2f m_move{ 0.0f,0.0f };
 	Vector2f m_frameMove{ 0.0f, 0.0f };
+	Vector2f m_worldSize{ 0.0f, 0.0f };
 };
 
 #endif	/*	end KEYBOARDMOVEMENTCOMPONENT_H_INLCUDE	*/

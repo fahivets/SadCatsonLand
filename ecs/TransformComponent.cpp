@@ -2,9 +2,17 @@
 #include "TransformComponent.h"
 #include "Entity.h"
 
+
+
 void TransformComponent::init()
 {
 	m_pPosComp = &m_entity->getComponent<PositionComponent>();
+	m_pBoxComp = &m_entity->getComponent<BoxComponent>();
+}
+
+void TransformComponent::update(const float& deltaTime)
+{
+	m_function();
 }
 
 void TransformComponent::setPosition(const float& x, const float& y)
@@ -42,4 +50,9 @@ void TransformComponent::setY(const float& y)
 Vector2f TransformComponent::getPosition() const
 {
 	return (m_pPosComp->m_position);
+}
+
+void TransformComponent::setFunction(std::function<void(void)> function)
+{
+	m_function = function;
 }

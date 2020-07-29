@@ -92,15 +92,13 @@ void MainGame::run()
 		// Update states status and pop it
 		updateState();
 
-		// Update prev input
-	//	m_input.updatePrevInput();
-
 		// Update delta time every frame
 		deltaTime = m_timer.getDelta();
-		// TODO: DELL
+		/* show FPS
 		// TPM Update Window Title
 		std::string title = "FT: " + std::to_string(deltaTime) + "\t FPS : " + std::to_string(m_timer.getFPS(deltaTime));
 		SDL_SetWindowTitle(&m_display.getWindow(), title.c_str());
+		*/
 	}
 }
 
