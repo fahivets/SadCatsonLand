@@ -22,12 +22,16 @@ void AnimationComponent::update(const float& deltaTime)
 
 void AnimationComponent::handleInput(const InputManager& input)
 {
-	//Vector2f mousePos = input.mousePos();
 	m_mousePos = input.mousePos();
+	m_mousePos += m_offset;
+
 	Vector2f currPos = m_pSpriteComp->m_pBoxComp->m_pPosComp->m_position;
 	m_currPos = currPos;
+
+	m_viewDir = { m_mousePos.x - m_currPos.x , m_mousePos.y - m_currPos.y};
+	m_viewDir = m_viewDir.normalize();
+
 	m_pSpriteComp->m_angle = toDegrees(atan2(m_mousePos.y - m_currPos.y, m_mousePos.x - m_currPos.x));
-//	m_pSpriteComp->m_angle = toDegrees(atan2(m_mousePos.y - currPos.y, m_mousePos.x - currPos.x));
 }
 
 void AnimationComponent::render(SDL_Renderer& rRender)

@@ -162,10 +162,12 @@
     <ClCompile Include="ecs\AnimationComponent.cpp" />
     <ClCompile Include="ecs\BoxComponent.cpp" />
     <ClCompile Include="ecs\CameraComponent.cpp" />
+    <ClCompile Include="ecs\EnemyAIComponent.cpp" />
     <ClCompile Include="ecs\Entity.cpp" />
     <ClCompile Include="ecs\EntityManager.cpp" />
     <ClCompile Include="ecs\KeyboardMovementComponent.cpp" />
     <ClCompile Include="ecs\LableComponent.cpp" />
+    <ClCompile Include="ecs\PhysicsComponent.cpp" />
     <ClCompile Include="ecs\PositionComponent.cpp" />
     <ClCompile Include="ecs\SpriteComponent.cpp" />
     <ClCompile Include="ecs\TextureComponent.cpp" />
@@ -200,10 +202,12 @@
     <ClInclude Include="ecs\Component.h" />
     <ClInclude Include="ecs\ComponentIncludeHelper.h" />
     <ClInclude Include="ecs\ECSHelper.h" />
+    <ClInclude Include="ecs\EnemyAIComponent.h" />
     <ClInclude Include="ecs\Entity.h" />
     <ClInclude Include="ecs\EntityManager.h" />
     <ClInclude Include="ecs\KeyboardMovementComponent.h" />
     <ClInclude Include="ecs\LableComponent.h" />
+    <ClInclude Include="ecs\PhysicsComponent.h" />
     <ClInclude Include="ecs\PositionComponent.h" />
     <ClInclude Include="ecs\SpriteComponent.h" />
     <ClInclude Include="ecs\TextureComponent.h" />

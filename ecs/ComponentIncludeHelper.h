@@ -11,6 +11,8 @@
 #include "KeyboardMovementComponent.h"
 #include "AnimationComponent.h"
 #include "SpriteComponent.h"
+#include "PhysicsComponent.h"
+#include "EnemyAIComponent.h"
 
 #include "CameraComponent.h" // test
 

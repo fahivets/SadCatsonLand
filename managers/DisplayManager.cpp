@@ -15,8 +15,8 @@ void DisplayManager::initDisplayManager(const int& width, const int& heigth)
 {
 	if (getStatus())
 		return;
-	m_winHeigth = width;
-	m_winWidth = heigth;
+	m_winWidth = width;
+	m_winHeigth = heigth;
 	m_winSize = { static_cast<float>(width), static_cast<float>(heigth) };
 	if (initSDL() && initWindow(width, heigth) && initRenderer())
 	{

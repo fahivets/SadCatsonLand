@@ -29,47 +29,125 @@ void PlayingState::handleInput(const InputManager& input)
 
 	if (input.mouseButtonPressed(LEFT))
 	{
-		ResourceHolder::get().audio.playSound("shotgun.wav", 0, 1);
+		auto& cameraBox(m_camera->getComponent<BoxComponent>());
+		//ResourceHolder::get().audio.playSound("shotgun.wav", 0, 1);
+		std::cout << "BOX_POS: " << cameraBox.m_fRect.x << " : " << cameraBox.m_fRect.y << "\n"
+			<< "BOX_SIZE: " << cameraBox.m_fRect.w << " : " << cameraBox.m_fRect.h << "\n";
 	}
-	if (input.mouseButtonDown(RIGHT))
+	if (input.mouseButtonPressed(RIGHT))
 	{
-		std::cout << "MOUSE_POS: " << input.mousePos() << "\n";
-	}
+		auto& playerSprite(m_player->getComponent<SpriteComponent>());
+		auto& playerPos(m_player->getComponent<PositionComponent>());
+		auto& playerAnim(m_player->getComponent<AnimationComponent>());
 
+		Vector2f pos = playerPos.m_position;
+		std::string textureName = {"bullet.png"};
+		Vector2f size = ResourceHolder::get().textures.getTextureSize(textureName);
+		float angle = playerSprite.m_angle;
+
+		Vector2f dir = playerAnim.m_viewDir; //dell
+
+		createBullet(pos, size, dir, angle, textureName);
+	}
+	
 	m_entityManager.handleInput(input);
 }
 
 void PlayingState::update(const float& deltaTime)
 {
-	
 	m_entityManager.refresh();
 	m_entityManager.update(deltaTime);
 
-	auto& camera(m_player->getComponent<CameraComponent>());
-	auto& backgrounds(m_entityManager.getEntitiesByGroup(GBackground));
-	auto& enemys(m_entityManager.getEntitiesByGroup(GEnemy));
+	auto& playerBox(m_player->getComponent<BoxComponent>());
+	auto& cameraBox(m_camera->getComponent<BoxComponent>());
+	cameraBox.m_fRect.x = playerBox.xCenter() - cameraBox.xCenter();
+	cameraBox.m_fRect.y = playerBox.yCenter() - cameraBox.yCenter();
 
-	for (auto& bg : backgrounds)
+	if (cameraBox.x() < 0)
 	{
-		auto& bgTexture(bg->getComponent<SpriteComponent>());
-		bgTexture.m_srcRect = camera.m_camera;//
-
-	//	auto& bgPos(bg->getComponent<TransformComponent>());
-	//	bgPos.addPosition(-camera.m_fRect.x, -camera.m_fRect.y);
-		bgTexture.m_dstFRect.w = camera.m_fRect.w;//
-		bgTexture.m_dstFRect.h = camera.m_fRect.h;//
+		cameraBox.m_fRect.x = 0;
 	}
+	if (cameraBox.y() < 0)
+	{
+		cameraBox.m_fRect.y = 0;
+	}
+	if (cameraBox.x() > 1600 - cameraBox.w())
+	{
+		cameraBox.m_fRect.x = 1600 - cameraBox.w();
+	}
+	if (cameraBox.y() > 1200 - cameraBox.h())
+	{
+		cameraBox.m_fRect.y = 1200 - cameraBox.h();
+	}
+	auto& playerSprite(m_player->getComponent<SpriteComponent>());
+	playerSprite.m_dstFRect.x = playerBox.x() - cameraBox.m_fRect.x;
+	playerSprite.m_dstFRect.y = playerBox.y() - cameraBox.m_fRect.y;
 
-	auto& pBox(m_player->getComponent<BoxComponent>());
+	// fix mousepos
+	auto& pAnim(m_player->getComponent<AnimationComponent>());
+	pAnim.m_offset.x = cameraBox.m_fRect.x;
+	pAnim.m_offset.y = cameraBox.m_fRect.y;
+
+	auto& enemys(m_entityManager.getEntitiesByGroup(GEnemy));
 	for (auto& enemy : enemys)
 	{
-		auto& bBox(enemy->getComponent<BoxComponent>());
-		if (isIntersecting(pBox, bBox))
-		{
-		//	enemy->destroy();
-			std::cout << "INTERSECT enemy" << "\n";
-		}	
+		auto& enemyBox(enemy->getComponent<BoxComponent>());
+		auto& enemySprite(enemy->getComponent<SpriteComponent>());
+		auto& enemyAI(enemy->getComponent<EnemyAIComponent>());
+		enemySprite.m_dstFRect.x = enemyBox.x() - cameraBox.m_fRect.x;
+		enemySprite.m_dstFRect.y = enemyBox.y() - cameraBox.m_fRect.y;
+		enemyAI.m_targetPos = playerBox.m_pPosComp->m_position;
+
+		if (isIntersecting(enemyBox, playerBox))
+			enemy->destroy();
+
 	}
+
+
+	auto& worldTexture(m_world->getComponent<SpriteComponent>());
+//	worldTexture.m_dstFRect.x = 0;
+//	worldTexture.m_dstFRect.y = 0;
+	worldTexture.m_dstFRect.w = cameraBox.w();
+	worldTexture.m_dstFRect.h = cameraBox.h();
+	worldTexture.m_srcRect.x = static_cast<int>(cameraBox.x());
+	worldTexture.m_srcRect.y = static_cast<int>(cameraBox.y());
+	worldTexture.m_srcRect.w = static_cast<int>(cameraBox.w());
+	worldTexture.m_srcRect.h = static_cast<int>(cameraBox.h());
+
+	auto& bullets(m_entityManager.getEntitiesByGroup(GBullet));
+	for (auto& bullet : bullets)
+	{
+		auto& box(bullet->getComponent<BoxComponent>());
+		auto& sprite(bullet->getComponent<SpriteComponent>());
+		sprite.m_dstFRect.x = box.x() - cameraBox.m_fRect.x;
+		sprite.m_dstFRect.y = box.y() - cameraBox.m_fRect.y;
+		for (auto& enemy : enemys)
+		{
+			auto& enemyBox(enemy->getComponent<BoxComponent>());
+			if (isIntersecting(enemyBox, box))
+			{
+				enemy->destroy();
+				bullet->destroy();
+			}
+		}
+	}
+
+	if (bullets.size() > 5)
+		bullets[0]->destroy();
+
+	if (static_cast<unsigned int>(m_entityManager.getEntitiesByGroup(GEnemy).size() < m_maxEnemies))
+	{
+		if (m_enemySpawnTimer >= m_enemySpawnTimerMax)
+		{
+			// Spawn the enemy adn reset the timer
+			spawnEnemy(playerBox.m_pPosComp->m_position, 300.f);
+			m_enemySpawnTimer = 0.0f;
+		}
+		else
+			m_enemySpawnTimer += 1.0f;
+	}
+
+
 }
 
 void PlayingState::render(SDL_Renderer& rRender)
@@ -81,15 +159,11 @@ void PlayingState::render(SDL_Renderer& rRender)
 void PlayingState::initStateResources()
 {
 	// Load textures
-	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "background_test.png");
-
 	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player.png");
-	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player_walk.png");
-	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player_run.png");
-
 	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "mob_5.png");
-
-	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "player_sprite.png");
+	
+	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "board.png");
+	ResourceHolder::get().textures.set(m_pGame->getRenderer(), "bullet.png");
 
 	// Load audio
 	ResourceHolder::get().audio.setMusic("lvl_1_theme.mp3");
@@ -100,13 +174,35 @@ void PlayingState::initStateResources()
 
 void PlayingState::createStateEntitys()
 {
-	Vector2f worldSize = ResourceHolder::get().textures.getTextureSize("background_test.png");
+	// Create camera
+	m_camera = &createCamera();
 	
-	m_world = &createBackground( {worldSize.x / 2,worldSize.y / 2 }, worldSize);
-	m_player = &createPlayer({worldSize.x / 2, 60 }, Vector2f{ 66,60 });
-	
-	//m_bob = &createEnemy({ worldSize.x / 2, worldSize.y / 2 }, Vector2f{ 32,32 });
-	m_bob = &createEnemy({ worldSize.x / 2, 300 }, Vector2f{ 32,32 });
+	// Create wolrd
+	Vector2f worldSize{1600, 1200};
+	m_world = &createWorld({ 800,600 }, worldSize);
+
+	// Create player
+	Vector2f playerPos{0,0};
+	Vector2f playerSize{32.0f, 32.0f};
+	m_player = &createPlayer(playerPos, playerSize, "mob_5.png");
+
+	// Create enemys
+	m_maxEnemies = 10;
+	m_enemySpawnTimerMax = 30.0f;
+	m_enemySpawnTimer = m_enemySpawnTimerMax;
+	// Updating the timer for enemy spawning
+	if (static_cast<int>(m_entityManager.getEntitiesByGroup(GEnemy).size() < m_maxEnemies))
+	{
+		if (m_enemySpawnTimer >= m_enemySpawnTimerMax)
+		{
+			// Spawn the enemy adn reset the timer
+			spawnEnemy(playerPos, 300.f);
+			m_enemySpawnTimer = 0.0f;
+		}
+		else
+			m_enemySpawnTimer += 1.0f;
+	}
+
 }
 
 void PlayingState::playMusic()
@@ -114,43 +210,29 @@ void PlayingState::playMusic()
 	ResourceHolder::get().audio.playMusic("lvl_1_theme.mp3");
 }
 
-Entity& PlayingState::createBackground(const Vector2f& rPosition, const Vector2f& rSize)
+Entity& PlayingState::createWorld(const Vector2f& rPosition, const Vector2f& rSize)
 {
 	auto& entity(m_entityManager.addEntity());
 
 	entity.addComponent<PositionComponent>(rPosition);
 	entity.addComponent<BoxComponent>(rSize);
-	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), "background_test.png");
+	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), "board.png");
 	entity.addComponent<TransformComponent>();
-	entity.addGroup(PlayingStateGroup::GBackground);
+	entity.addGroup(PlayingStateGroup::GWorld);
 
 	return (entity);
 }
 
-Entity& PlayingState::createPlayer(const Vector2f& rPosition, const Vector2f& rSize)
+Entity& PlayingState::createPlayer(const Vector2f& rPosition, const Vector2f& rSize, const std::string& textureName)
 {
 	auto& entity(m_entityManager.addEntity());
-	
 	entity.addComponent<PositionComponent>(rPosition);
 	entity.addComponent<BoxComponent>(rSize);
-	
-	std::string spriteTextureName = { "player.png" };
-	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), spriteTextureName);
-
-	entity.addComponent<AnimationComponent>();
-	auto& animation(entity.getComponent<AnimationComponent>());
-	// Create walk animation
-	FrameData walkAnimationData;
-	walkAnimationData.id = 1;
-	walkAnimationData.displayTimeMSeconds = 0.0f;
-	walkAnimationData.rect = { 0, 0, 0, 0 };
-	animation.addAnimation(AnimationState::Walk, createAnimations(walkAnimationData, spriteTextureName, 1));
+	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), textureName);
 	
 	entity.addComponent<TransformComponent>();
-
-	entity.addComponent<CameraComponent>(Vector2f{ 800,600 }, Vector2f{840, 1300});
 	entity.addComponent<KeyboardMovementComponent>(Vector2f{0.2f, 0.2f});
-
+	entity.addComponent<AnimationComponent>();
 	entity.addGroup(PlayingStateGroup::GPlayer);
 	return (entity);
 }
@@ -176,14 +258,82 @@ std::shared_ptr<Animation> PlayingState::createAnimations(const FrameData& anima
 Entity& PlayingState::createEnemy(const Vector2f& rPosition, const Vector2f& rSize)
 {
 	auto& entity(m_entityManager.addEntity());
+	entity.addComponent<PositionComponent>(rPosition);
+	entity.addComponent<BoxComponent>(rSize);
+	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), "mob_5.png");
+	entity.addComponent<EnemyAIComponent>();
+	
+	entity.addComponent<PhysicsComponent>();
+	auto& physics(entity.getComponent<PhysicsComponent>());
+	physics.m_velocity = { 0.1f, 0.1f };
+	
+	entity.addGroup(PlayingStateGroup::GEnemy);
+	return (entity);
+}
 
+Entity& PlayingState::createCamera()
+{
+	auto& entity(m_entityManager.addEntity());
+	// Create camera at pos = midle of the window
+	entity.addComponent<PositionComponent>(Vector2f{ m_pGame->getWinWidth() / 2.0f, m_pGame->getWinHeigth() / 2.0f });
+	// 800 / 600
+	entity.addComponent<BoxComponent>(m_pGame->getWinSize());
+	
+
+	entity.addGroup(PlayingStateGroup::GCamera);
+	return (entity);
+}
+
+Entity& PlayingState::createBullet(const Vector2f& rPosition, const Vector2f& rSize, const Vector2f& dir, const float& angleDir, const std::string& textureName)
+{
+	auto& entity(m_entityManager.addEntity());
 	entity.addComponent<PositionComponent>(rPosition);
 	entity.addComponent<BoxComponent>(rSize);
 
-	std::string spriteTextureName = { "mob_5.png" };
-	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), spriteTextureName);
-	entity.addComponent<TransformComponent>();
+	entity.addComponent<SpriteComponent>(m_pGame->getRenderer(), textureName);
+	auto& sprite(entity.getComponent<SpriteComponent>());
+	sprite.m_angle = angleDir;
 
-	entity.addGroup(PlayingStateGroup::GEnemy);
+	entity.addComponent<PhysicsComponent>();
+	auto& physics(entity.getComponent<PhysicsComponent>());
+	physics.m_dir = dir;
+	//physics.m_velocity = {0.5f, 0.5f};
+	physics.m_velocity = { 0.1f, 0.1f };
+	entity.addGroup(PlayingStateGroup::GBullet);
 	return (entity);
+}
+
+void PlayingState::spawnEnemy(const Vector2f& playerPos, const float& minDistanceToThePlayer)
+{
+	Vector2f pos{ 0.0f, 0.0f };
+	Vector2f worldSize{ 1600, 1200 };
+	
+	switch (RandomGenerator::getRandomInt(1, 4))
+	{
+		// right
+		case 1:
+			pos.x = RandomGenerator::getRandomFloat(playerPos.x + minDistanceToThePlayer, worldSize.x - 50);
+			pos.y = playerPos.y;
+			break;
+		// left
+		case 2:
+			pos.x = RandomGenerator::getRandomFloat(playerPos.x - minDistanceToThePlayer, 0 + 50);
+			pos.y = playerPos.y;
+			break;
+		// bottom
+		case 3:
+			pos.x = playerPos.x;
+			pos.y = RandomGenerator::getRandomFloat(playerPos.y + minDistanceToThePlayer, worldSize.y - 50);
+			break;
+		// top
+		case 4:
+			pos.x = playerPos.x;
+			pos.y = RandomGenerator::getRandomFloat(playerPos.y - minDistanceToThePlayer, 0 + 50);
+			break;
+		
+		default:
+			break;
+	}
+
+	createEnemy(pos, {32.0f, 32.0f});
 }

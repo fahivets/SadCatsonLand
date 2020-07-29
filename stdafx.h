@@ -27,5 +27,6 @@
 // Helpers
 #include "utility/Maths.h"
 #include "GameProperties.h"
+#include "utility/RandomGenerator.h"
 
 #endif	/*	end STDAFX_H_INCLUDE	*/

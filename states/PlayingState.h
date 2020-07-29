@@ -13,9 +13,10 @@ public:
 	enum PlayingStateGroup : std::size_t
 	{
 		GCamera,
-		GBackground,
+		GWorld,
 		GPlayer,
-		GEnemy
+		GEnemy,
+		GBullet
 	};
 
 	// Constructors/Destructors
@@ -35,19 +36,15 @@ private:
 	void playMusic();
 	
 	// Entity factory
-	Entity& createBackground(const Vector2f& rPosition, const Vector2f& rSize);
-	Entity& createPlayer(const Vector2f& rPosition, const Vector2f& rSize);
+	Entity& createWorld(const Vector2f& rPosition, const Vector2f& rSize);
+	Entity& createPlayer(const Vector2f& rPosition, const Vector2f& rSize, const std::string& textureName);
 	std::shared_ptr<Animation> createAnimations(const FrameData& animationFrameData, const std::string& spriteTextureName, int rows = 1);
 	Entity& createEnemy(const Vector2f& rPosition, const Vector2f& rSize);
-		/*
-	void createBall();
-	void createPaddle();
-	void createBrick(const Vector2f& rPosition);
+	Entity& createCamera();
+	Entity& createBullet(const Vector2f& rPosition, const Vector2f& rSize, const Vector2f& dir, const float& angleDir, const std::string& textureName);
 
-	// Collision
-	void testBPCollision(Entity& rBall, Entity& rPaddle) noexcept;
-	void testBBCollision(Entity& rBall , Entity& rBrick) noexcept;
-	*/
+	void spawnEnemy(const Vector2f& playerPos, const float& minDistanceToThePlayer);
+
 
 	template <class T1, class T2>
 	bool isIntersecting(T1& rA, T2& rB) noexcept;
@@ -56,8 +53,12 @@ private:
 	// Members
 	EntityManager m_entityManager;
 	Entity* m_world{ nullptr };
-	Entity* m_bob{ nullptr };
 	Entity* m_player{ nullptr };
+	Entity* m_camera{ nullptr };
+
+	unsigned int m_maxEnemies{ 0 };
+	float m_enemySpawnTimerMax{ 0.0f };
+	float m_enemySpawnTimer{ 0.0f };
 };
 
 // Template functions

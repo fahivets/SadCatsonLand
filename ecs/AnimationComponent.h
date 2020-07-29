@@ -37,6 +37,9 @@ struct AnimationComponent : public Component
 	//test
 	Vector2f m_mousePos;
 	Vector2f m_currPos;
+	Vector2f m_offset{ 0.0f,0.0f };
+	Vector2f m_viewDir{0.0f, 0.0f};
+
 };
 
 #endif	/*	end ANIMATIONCOMPONENT_H_INCLUDE	*/

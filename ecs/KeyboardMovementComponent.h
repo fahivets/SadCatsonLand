@@ -21,9 +21,9 @@ struct KeyboardMovementComponent : public Component
 
 	// Members
 	TransformComponent* m_pTransformComp{ nullptr };
-	
 	BoxComponent* m_pBoxComp{ nullptr };
-	CameraComponent* m_pCameraComp{ nullptr };
+
+	//CameraComponent* m_pCameraComp{ nullptr };
 	Vector2f m_velocity{ 0.0f,0.0f };
 	Vector2f m_move{ 0.0f,0.0f };
 	Vector2f m_frameMove{ 0.0f, 0.0f };

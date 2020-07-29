@@ -28,18 +28,30 @@ std::mt19937& RandomGenerator::getR2D2()
 
 int RandomGenerator::getRandomInt(int from, int to)
 {
+	if (from > to)
+	{
+		std::swap(from, to);
+	}
 	std::uniform_int_distribution<int> dist(from, to);
 	return (dist(RandomGenerator::instance().getR2D2()));
 }
 
 float RandomGenerator::getRandomFloat(float from, float to)
 {
+	if (from > to)
+	{
+		std::swap(from, to);
+	}
 	std::uniform_real_distribution<float> dist(from, to);
 	return (dist(RandomGenerator::instance().getR2D2()));
 }
 
 double RandomGenerator::getRandomDouble(double from, double to)
 {
+	if (from > to)
+	{
+		std::swap(from, to);
+	}
 	std::uniform_real_distribution<double> dist(from, to);
 	return (dist(RandomGenerator::instance().getR2D2()));
 }

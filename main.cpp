@@ -11,6 +11,5 @@ int main(int argc, char** argv)
 	game.run();
 
 	std::cout << "<<< QUIT_GAME >>>" << std::endl;
-	
 	return (0);
 }

@@ -29,12 +29,12 @@ private:
 	void quit();
 
 private:
-	SDL_Window* m_window;
-	SDL_Renderer* m_renderer;
-	bool m_status;
-	Vector2f m_winSize;
-	int m_winWidth;
-	int m_winHeigth;
+	SDL_Window* m_window{ nullptr };
+	SDL_Renderer* m_renderer{ nullptr };
+	bool m_status{ false };
+	Vector2f m_winSize{ 0.0f, 0.0f };
+	int m_winWidth{ 0 };
+	int m_winHeigth{ 0 };
 };
 
 #endif	/*	end DISPLAYMANAGER_H_INCLUDE	*/
